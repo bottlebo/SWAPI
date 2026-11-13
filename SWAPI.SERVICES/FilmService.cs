@@ -69,5 +69,22 @@ namespace SWAPI.SERVICES
       var characters = await _personService.GetEntitiesByIdsAsync(characterIds);
       return ServiceOperationResult<List<Person>>.Ok(characters.ToList());
     }
+    public async Task<ServiceOperationResult<Film>> GetFilmWithCharacters(int filmId)
+    {
+      var film = await GetEntityByIdAsync(filmId);
+      if (film == null)
+      {
+        return ServiceOperationResult<Film>.NotFound<Film>($"Film with ID {filmId} not found.");
+      }
+
+      var characterIds = await GetRelationsIdsAsync(film, nameof(FilmJson.Characters));
+      var characters = await _personService.GetEntitiesByIdsAsync(characterIds);
+      film.Characters = characters;
+
+      // Assuming you want to return the film along with its characters
+      // You might want to create a new model that includes both Film and its Characters
+      // For now, I'm returning just the film in a list for demonstration purposes
+      return ServiceOperationResult<List<Film>>.Ok(film);
+    }
   }
 }
