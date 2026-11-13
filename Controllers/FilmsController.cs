@@ -42,5 +42,12 @@ namespace SWAPI.Controllers
                 await _filmService.GetCharactersByFilmIdAsync(filmId)
             );
         }
+        [HttpGet("{filmId}/with-characters")]
+        public async Task<IActionResult> GetFilmWithCharacters([FromRoute] int filmId)
+        {
+            return this.FromServiceOperationResult(
+                await _filmService.GetFilmWithCharacters(filmId)
+            );
+        }
     }
 }
